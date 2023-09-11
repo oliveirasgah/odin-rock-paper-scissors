@@ -70,6 +70,35 @@ function game() {
     console.log(`Final score: ${playerPoints}:${cpuPoints}`);
 }
 
+function updateStyles(resultRound) {
+    const playerScore = document.querySelector('.player_score');
+    const playerStrong = document.querySelector('.player_strong');
+    const cpuScore = document.querySelector('.cpu_score');
+    const cpuStrong = document.querySelector('.cpu_strong');
+
+    if(resultRound == null) {
+        playerStrong.style.color = 'darkgrey';
+        cpuStrong.style.color = 'darkgrey';
+    } else if(resultRound) {
+        playerStrong.style.color = 'green';
+        cpuStrong.style.color = 'red';
+    } else {
+        playerStrong.style.color = 'red';
+        cpuStrong.style.color = 'green';
+    }
+
+    if(playerPoints > cpuPoints) {
+        playerScore.style.color = 'green';
+        cpuScore.style.color = 'red';
+    } else if(playerPoints < cpuPoints) {
+        playerScore.style.color = 'red';
+        cpuScore.style.color = 'green';
+    } else {
+        playerScore.style.color = 'darkgrey';
+        cpuScore.style.color = 'darkgrey';
+    }
+}
+
 const buttons = document.querySelectorAll('.btn_choice');
 let playerPoints = 0;
 let cpuPoints = 0;
@@ -85,15 +114,18 @@ buttons.forEach(button => button.addEventListener('click', e => {
     const result = playRound(playerChoice, cpuChoice);
 
     if(result == null) {
-        roundResult.textContent = `It's a draw! ` +
-            `${playerChoice} and ${cpuChoice} are equal!`;
+        roundResult.innerHTML = `It's a draw! ` +
+            `<strong class="player_strong">${playerChoice}</strong> and ` +
+            `<strong class="cpu_strong">${cpuChoice}</strong> are equal!`;
     } else if(result) {
-        roundResult.textContent = `You win! ` +
-            `${playerChoice} beats ${cpuChoice}!`;
+        roundResult.innerHTML = `You win! ` +
+            `<strong class="player_strong">${playerChoice}</strong> beats ` +
+            `<strong class="cpu_strong">${cpuChoice}</strong>!`;
         playerPoints++;
     } else {
-        roundResult.textContent = `You lose! ` +
-            `${cpuChoice} beats ${playerChoice}!`
+        roundResult.innerHTML = `You lose! ` +
+            `<strong class="cpu_strong">${cpuChoice}</strong> beats ` +
+            `<strong class="player_strong">${playerChoice}</strong>!`;
         cpuPoints++;
     }
 
@@ -101,18 +133,26 @@ buttons.forEach(button => button.addEventListener('click', e => {
 
     if(roundsPlayed == 5) {
         if(playerPoints > cpuPoints)
-            matchResult.textContent = 'Congratulations! You won the game!';
+            matchResult.innerHTML = 'Congratulations! You won the game!';
         else if(cpuPoints > playerPoints)
-            matchResult.textContent = 'You lost! Better luck next time!';
+            matchResult.innerHTML = 'You lost! Better luck next time!';
         else
-            matchResult.textContent = 'The game ended in a draw.';
+            matchResult.innerHTML = 'The game ended in a draw.';
 
-        matchResult.innerHTML += `<br>Final score: ${playerPoints}:${cpuPoints}`;
+        matchResult.innerHTML += `<br>Final score:<br>` +
+            `Player <strong class="player_score">${playerPoints}</strong>:` +
+            `<strong class="cpu_score">${cpuPoints}</strong> CPU`;
+
+        updateStyles(result);
 
         roundsPlayed = 0;
         playerPoints = 0;
         cpuPoints = 0;
     } else {
-        matchResult.textContent = `Player ${playerPoints} X ${cpuPoints} CPU`;
+        matchResult.innerHTML = `Player <strong class="player_score">` +
+        `${playerPoints}</strong> X <strong class="cpu_score">${cpuPoints}` +
+        `</strong> CPU`;
+
+        updateStyles(result);
     }
 }));
