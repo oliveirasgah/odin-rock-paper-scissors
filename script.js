@@ -39,7 +39,7 @@ function game() {
     let playerPoints = 0;
     let cpuPoints = 0;
 
-    for(let i = 1; i <= 5; i++) {
+    for(let i = 1; i <= 1; i++) {
         let playerChoice = prompt('Rock, paper, or scissors?').toUpperCase();
         let cpuChoice = getComputerChoice().toUpperCase();
 
@@ -69,3 +69,50 @@ function game() {
 
     console.log(`Final score: ${playerPoints}:${cpuPoints}`);
 }
+
+const buttons = document.querySelectorAll('.btn_choice');
+let playerPoints = 0;
+let cpuPoints = 0;
+let roundsPlayed = 0;
+
+buttons.forEach(button => button.addEventListener('click', e => {
+    const roundResult = document.querySelector('.round_result');
+    const matchResult = document.querySelector('.match_result');
+
+    const playerChoice = e.target.textContent;
+    const cpuChoice = getComputerChoice().toUpperCase();
+
+    const result = playRound(playerChoice, cpuChoice);
+
+    if(result == null) {
+        roundResult.textContent = `It's a draw! ` +
+            `${playerChoice} and ${cpuChoice} are equal!`;
+    } else if(result) {
+        roundResult.textContent = `You win! ` +
+            `${playerChoice} beats ${cpuChoice}!`;
+        playerPoints++;
+    } else {
+        roundResult.textContent = `You lose! ` +
+            `${cpuChoice} beats ${playerChoice}!`
+        cpuPoints++;
+    }
+
+    roundsPlayed++;
+
+    if(roundsPlayed == 5) {
+        if(playerPoints > cpuPoints)
+            matchResult.textContent = 'Congratulations! You won the game!';
+        else if(cpuPoints > playerPoints)
+            matchResult.textContent = 'You lost! Better luck next time!';
+        else
+            matchResult.textContent = 'The game ended in a draw.';
+
+        matchResult.innerHTML += `<br>Final score: ${playerPoints}:${cpuPoints}`;
+
+        roundsPlayed = 0;
+        playerPoints = 0;
+        cpuPoints = 0;
+    } else {
+        matchResult.textContent = `Player ${playerPoints} X ${cpuPoints} CPU`;
+    }
+}));
