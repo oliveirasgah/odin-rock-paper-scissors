@@ -36,5 +36,19 @@ body {
 
 .results {
     text-align: center;
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.player_strong,
+.player_score,
+.cpu_strong,
+.cpu_score {
+    font-weight: 700;
+    font-size: 23px;
+}
+
+.match_result {
+    font-weight: 700;
 }
 
